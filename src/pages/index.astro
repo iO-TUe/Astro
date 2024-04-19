@@ -1,0 +1,9 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const urls = Object.keys(import.meta.glob("./*.astro"));
+---
+
+<Layout>
+    {urls.map((href) => <a href={href.split(".a")[0]}>{href.split("/")[1]}</a>)}
+</Layout>
