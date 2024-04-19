@@ -1,5 +1,5 @@
 /** @jsxImportSource solid-js */
-import { For, createSignal, type Component } from 'solid-js'
+import { For, createSignal, onMount, type Component } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import Counter from "./counter"
 import './index.css'
@@ -10,6 +10,7 @@ const Todo: Component = () => {
     let id = 0
     const [items, setItems] = createStore<{ id: number, text: string }[]>([])
     const [input, setInput] = createSignal('')
+    let i: HTMLInputElement
 
     function addItem({ key }: KeyboardEvent) {
         if (key === "Enter" && input()) {
@@ -22,11 +23,15 @@ const Todo: Component = () => {
         setItems(items.filter(({ id }) => id !== rid))
     }
 
+    onMount(() => {
+        i.disabled = false
+    })
+
     return <>
         <section id="todo">
             <label >
                 <h2>Add new item</h2>
-                <input id="input" value={input()} onInput={(ev) => setInput(ev.target.value)} onKeyDown={addItem} />
+                <input ref={i!} disabled id="input" value={input()} onInput={(ev) => setInput(ev.target.value)} onKeyDown={addItem} />
             </label>
             <ul class="list">
                 <For each={items}>{(item) =>
