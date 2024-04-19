@@ -1,0 +1,8 @@
+---
+import Counter from "../components/svelte/counter.svelte";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+    <Counter client:load initialValue={80} maxValue={12} recurse={true} />
+</Layout>

@@ -1,0 +1,8 @@
+---
+import Counter from "../components/react/counter.tsx";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+    <Counter client:load initialValue={80} maxValue={12} recurse={true} />
+</Layout>
