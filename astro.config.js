@@ -7,9 +7,9 @@ import { defineConfig } from 'astro/config'
 
 export default defineConfig({
     integrations: [
-        qwik({ include: ['**/qwik/*'] }),
-        react({ include: ['**/react/*.tsx'] }),
-        solid({ include: ['**/solid/*'] }),
-        svelte({ include: ['**/svelte/*'] }),
-        vue({ include: ['**/vue/*.vue'] })]
+        qwik({ include: ['**/qwik/**/*'] }),
+        react({ include: ['**/react/**/*.tsx'] }),
+        solid({ include: ['**/solid/**/*'] }),
+        svelte({ include: ['**/svelte/**/*'] }),
+        vue({ include: ['**/vue/**/*.vue', '../../../vue/**/*.vue'] })]
 })

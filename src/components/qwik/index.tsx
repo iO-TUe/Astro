@@ -1,17 +1,34 @@
 /** @jsxImportSource @builder.io/qwik */
-import { $, component$, useOnDocument, useSignal, useStore, useStylesScoped$ } from "@builder.io/qwik"
-import Counter from "./counter"
+import { $, component$, useSignal, useStore, useStylesScoped$ } from "@builder.io/qwik"
+import Counter from "./counter.gen"
 import Item from "./item"
 
 
 export default component$(() => {
     useStylesScoped$(/*scss*/`
+        .App-main {
+            background-color: var(--main-background);
+            height: calc(100vh - 114px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: calc(10px + 2vmin);
+            color: white;
+            padding: 0 2em
+        }
+
+
         input {
             width: 100%;
         }
 
         .list {
             padding-inline-start: 0;
+        }
+        
+        #counters {
+            height: 10vh;
         }
 
         #counters :global(.counters) {
@@ -20,14 +37,13 @@ export default component$(() => {
     `)
 
     const id = useSignal(0)
-    const input = useSignal('')
     const items = useStore<{ $: { id: number, text: string }[] }>({ $: [] })
-    const i = useSignal<HTMLInputElement>()
+    const input = useSignal<HTMLInputElement>()
 
-    const addItem = $(({ key }: KeyboardEvent) => {
-        if (key === 'Enter' && input.value) {
-            items.$.push({ id: id.value++, text: input.value })
-            input.value = ""
+    const addItem = $(({ key }: KeyboardEvent, el: HTMLInputElement) => {
+        if (key === 'Enter' && el.value) {
+            items.$.push({ id: id.value++, text: el.value })
+            el.value = ''
         }
     })
 
@@ -35,25 +51,22 @@ export default component$(() => {
         items.$ = items.$.filter(({ id }) => id !== rid)
     })
 
-    useOnDocument('DOMContentLoaded', $(() => {
-        i.value!.disabled = false
-    }))
-
     // { console.log('Script: App') }
     return <>
         {/* {console.log('Render: App')} */}
-        <section id="todo">
-            <label >
-                <h2>Add new item</h2>
-                <input ref={i} disabled id="input" bind:value={input} onKeyUp$={addItem} />
-            </label>
-            <ul class="list">
-                {items.$.map(item => <Item key={item.id} item={item} remove$={removeItem} />)}
-            </ul>
-        </section>
-        <section id="counters">
-            <Counter initialValue={50} maxValue={500} recurse={false} />
-        </section>
-
+        <main class="App-main">
+            <section id="todo">
+                <label >
+                    <h2>Add new item</h2>
+                    <input ref={input} id="input" onKeyUp$={addItem} />
+                </label>
+                <ul class="list">
+                    {items.$.map(item => <Item key={item.id} item={item} remove$={removeItem} />)}
+                </ul>
+            </section>
+            <section id="counters">
+                <Counter initialValue={50} maxValue={5} recurse={false} />
+            </section>
+        </main>
     </>
 })
